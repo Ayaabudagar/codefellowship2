@@ -24,3 +24,9 @@
 #### A logged-in user should be able to create a Post, and a post should belong to the user that created it.
 
 ### A user’s posts should be visible on their profile page.
+
+- rout "/" ; you can find the home page which contains some information about the website, and an acces to the users accounts.
+- rout "/login" ; you can log in to your acoount.
+- rout "/signup" ; you can create a new account.
+- rout "/users" ; the user can see the information about user who login.
+Run the project and see the result from the following link: http://localhost:8080

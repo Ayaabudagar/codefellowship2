@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class ApplicationUser implements UserDetails  {
@@ -19,6 +20,8 @@ public class ApplicationUser implements UserDetails  {
     private String lastName;
     private int dateOfBirth;
     private String bio;
+    @OneToMany(mappedBy ="applicationUser")
+    private List<Post> postList;
 
     public  ApplicationUser (){
 
@@ -28,8 +31,9 @@ public class ApplicationUser implements UserDetails  {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth=dateOfBirth;
         this.bio=bio;
+
     }
 
     public ApplicationUser(String username, String encode) {
@@ -44,30 +48,50 @@ public class ApplicationUser implements UserDetails  {
     public String getPassword() {
         return password;
     }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String getUsername() {
         return username;
     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Integer getId() {
         return id;
     }
-    @Override
-    public Integer getDateOfBirth() {
+
+    public int getDateOfBirth() {
         return dateOfBirth;
     }
-    @Override
+    public void setDateOfBirth(int dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getFirstName() {
         return firstName;
     }
-    @Override
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
     public String getLastName() {
         return lastName;
     }
-    @Override
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
     public String getBio() {
         return bio;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
 
@@ -91,6 +115,12 @@ public class ApplicationUser implements UserDetails  {
     public boolean isEnabled() {
         return true;
     }
+    public List<Post> getPostList() {
+        return postList;
+    }
 
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
+    }
 
 }
