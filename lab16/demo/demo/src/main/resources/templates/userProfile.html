@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div >
+<h1 th:text="${user.username}">User Name</h1>
+<h2 th:text="${user.firstName}">First Name</h2>
+<h3 th:text="${user.lastName}">Last Name</h3>
+<h4 th:text="${user.dateOfBirth}">Date Of Birth</h4>
+<h5 th:text="${user.bio}">Bio</h5>
+</div>
+<div >
+  <form action="#" th:action="'/add-post/'+ ${user.id}"  method="post">
+    <fieldset>
+      <legend>Add  Post </legend>
+      <textarea id="body" name="body" ></textarea>
+      <input type="submit" value="Submit">
+    </fieldset>
+  </form>
+</div>
+
+<div >
+  <div  th:each="post : ${user.post}" class="post">
+    <p th:text="${post.body}"></p>
+    <p th:text="${post.createdAt}"></p>
+
+
+  </div>
+
+
+
+</body>
+</html>
