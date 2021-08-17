@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.models.ApplicationUserRepository;
+import com.example.demo.models.DBUserRepository;
 import com.example.demo.models.Post;
 import com.example.demo.models.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,11 @@ public class PostController {
     @Autowired
     PostRepository postRepository ;
     @Autowired
-    ApplicationUserRepository applicationUserRepository;
+    DBUserRepository dbUserRepository;
     @PostMapping("/add-post/{id}")
     public RedirectView addPost(@RequestParam(value = "body") String body, @ModelAttribute Post post , @PathVariable(value="id") Integer id){
 
-        Post newPost = new Post( body ,  applicationUserRepository.findById(id).get());
+        Post newPost = new Post( body ,  dbUserRepository.findById(id).get());
 
         postRepository.save(newPost);
 

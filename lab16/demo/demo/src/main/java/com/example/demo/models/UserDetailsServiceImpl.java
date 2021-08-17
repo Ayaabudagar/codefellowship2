@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl  implements UserDetailsService {
     @Autowired
-    ApplicationUserRepository applicationUserRepository;
+    DBUserRepository dbUserRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username);
-        if(applicationUser == null){
+        DBUser newApplicationUser = dbUserRepository.findByUsername(username);
+        ApplicationUser applicationUser = new ApplicationUser(newApplicationUser);
+        if(newApplicationUser == null){
             throw  new UsernameNotFoundException("The user "+ username + " does not exist");
         }
         return applicationUser;
