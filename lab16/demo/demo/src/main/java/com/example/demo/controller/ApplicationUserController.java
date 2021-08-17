@@ -2,21 +2,25 @@ package com.example.demo.controller;
 
 import com.example.demo.models.ApplicationUser;
 import com.example.demo.models.ApplicationUserRepository;
+import com.example.demo.models.DBUser;
+import com.example.demo.models.DBUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ApplicationUserController {
 
     @Autowired
-    ApplicationUserRepository applicationUserRepository;
+    DBUserRepository dbUserRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -29,15 +33,47 @@ public class ApplicationUserController {
         return "signin.html";
     }
     @PostMapping("/signup")
-    public RedirectView signUp(@RequestParam(value="username") String username, @RequestParam(value="password") String password, @RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName") String lastName, @RequestParam(value = "dateOfBirth") int dateOfBirth,@RequestParam(value = "bio") String bio ){
-        ApplicationUser newUser = new ApplicationUser(username,bCryptPasswordEncoder.encode(password), firstName, lastName, dateOfBirth,bio);
-        applicationUserRepository.save(newUser);
+    public RedirectView signUp(@ModelAttribute DBUser dbUser ){
+        DBUser newUser = new DBUser(dbUser.getUsername(),bCryptPasswordEncoder.encode(dbUser.getPassword()) , dbUser.getFirstName(), dbUser.getLastName(), dbUser.getDateOfBirth(), dbUser.getBio());
+        dbUserRepository.save(dbUser);
         return new RedirectView("/login");
     }
 
     @GetMapping("/user/{id}")
-    public String getProfileById(@PathVariable(value="id") Integer  id , Model newModel){
-        newModel.addAttribute("user", applicationUserRepository.findById(id).get());
-        return("user.html");
+    public String getUserById(@PathVariable(value="id") Integer  id , Model newModel){
+
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal instanceof UserDetails) {
+                String username = ((UserDetails)principal).getUsername();
+                newModel.addAttribute("username" , username);
+                newModel.addAttribute("user",  dbUserRepository.findById(id).get());
+            } else {
+                String username = principal.toString();
+            }
+            return "user.html";
+
+
+//        newModel.addAttribute("user", dbUserRepository.findById(id).get());
+//        return("user.html");
     }
+    @GetMapping("/profile")
+    public String profile(Model newModel){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails)principal).getUsername();
+            newModel.addAttribute("username" , username);
+            newModel.addAttribute("user" , dbUserRepository.findByUsername(username));
+        } else {
+            String username = principal.toString();
+        }
+        return "userProfile.html";
+    }
+    @GetMapping("/feed")
+    public String feed(Principal p, Model newModel){
+        DBUser user = dbUserRepository.findByUsername(p.getName());
+        newModel.addAttribute("user",user);
+        return "feed.html";
+    }
+
 }
+

@@ -7,38 +7,19 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-public class ApplicationUser implements UserDetails  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(unique = true)
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private int dateOfBirth;
-    private String bio;
-    @OneToMany(mappedBy ="applicationUser")
-    private List<Post> postList;
+public class ApplicationUser implements UserDetails  {
+    private DBUser dbUser;
+
+    public ApplicationUser(DBUser dbUser) {
+        this.dbUser = dbUser;
+    }
+
 
     public  ApplicationUser (){
 
     }
-    public ApplicationUser(String username, String password ,String firstName , String lastName ,int dateOfBirth,String bio  ) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth=dateOfBirth;
-        this.bio=bio;
 
-    }
-
-    public ApplicationUser(String username, String encode) {
-
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -46,55 +27,18 @@ public class ApplicationUser implements UserDetails  {
     }
     @Override
     public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+        return dbUser.getPassword();
     }
 
-    @Override
+
+
     public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
+        return dbUser.getUsername();
     }
 
     public Integer getId() {
-        return id;
+        return dbUser.getId();
     }
-
-    public int getDateOfBirth() {
-        return dateOfBirth;
-    }
-    public void setDateOfBirth(int dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-
-    public String getBio() {
-        return bio;
-    }
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -115,12 +59,10 @@ public class ApplicationUser implements UserDetails  {
     public boolean isEnabled() {
         return true;
     }
-    public List<Post> getPostList() {
-        return postList;
-    }
-
-    public void setPostList(List<Post> postList) {
-        this.postList = postList;
-    }
 
 }
+
+
+
+
+
