@@ -7,10 +7,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
-    private DBUser applicationUser;
     private String body;
     private String createdAt;
+    @ManyToOne
+    private DBUser applicationUser;
+
 
     public Post(){
 
