@@ -1,6 +1,8 @@
 package com.example.demo.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class DBUser {
@@ -15,6 +17,16 @@ public class DBUser {
     private String lastName;
     private String dateOfBirth;
     private String bio;
+    @OneToMany(mappedBy ="applicationUser")
+    private List<Post> posts;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "following_followers",
+            joinColumns = @JoinColumn(name = "following_id"),
+            inverseJoinColumns = @JoinColumn(name = "followers_id"))
+    List<DBUser> following = new ArrayList<>();
+    @ManyToMany(mappedBy = "following")
+    List<DBUser> followers = new ArrayList<>();
 
     public DBUser(){
 
@@ -31,7 +43,7 @@ public class DBUser {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -80,6 +92,30 @@ public class DBUser {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+
+    }
+
+    public List<DBUser> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<DBUser> following) {
+        this.following = following;
+    }
+
+    public List<DBUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<DBUser> followers) {
+        this.followers = followers;
     }
 
 

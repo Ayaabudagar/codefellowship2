@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 public class PostController {
     @Autowired
@@ -19,9 +22,12 @@ public class PostController {
     @Autowired
     DBUserRepository dbUserRepository;
     @PostMapping("/add-post/{id}")
-    public RedirectView addPost(@RequestParam(value = "body") String body, @ModelAttribute Post post , @PathVariable(value="id") Integer id){
+    public RedirectView addPost(@RequestParam(value = "body") String body,  @PathVariable(value="id") int id){
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
 
-        Post newPost = new Post( body ,  dbUserRepository.findById(id).get());
+
+        Post newPost = new Post(body , formatter.format(date), dbUserRepository.findById(id).get());
 
         postRepository.save(newPost);
 
