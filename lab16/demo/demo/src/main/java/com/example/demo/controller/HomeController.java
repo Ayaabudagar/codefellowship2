@@ -14,10 +14,5 @@ public class HomeController {
         return "Hello World";
 
 }
-    @GetMapping("/")
-    @ResponseBody
-    public String getHome(Principal p){
-//        m.addAttribute("userName", p.getName());
-        return "Hello World " + p.getName();
-    }
+
 }
